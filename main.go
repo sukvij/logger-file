@@ -2,10 +2,14 @@ package main
 
 import (
 	"vijju/log"
+	"vijju/user"
 )
 
 func main() {
 
-	logger := log.NewAgreeGateLogger()
-	logger.Info("this is problem")
+	log := log.NewAgreeGateLogger()
+	err := user.AddUser(log)
+	if err != nil {
+		log.Error(err)
+	}
 }

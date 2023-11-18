@@ -11,14 +11,28 @@ type AgreeGateLoager struct {
 	ErrorLogger *log.Logger
 }
 
+var (
+	WarningLog *log.Logger
+	InfoLog    *log.Logger
+	ErrorLog   *log.Logger
+)
+
+func init() {
+	file, err := os.OpenFile("myLOG.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	InfoLog = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	WarningLog = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
+	ErrorLog = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+}
+
 func NewAgreeGateLogger() *AgreeGateLoager {
-	infoLogger := log.New(os.Stdout, "INFO", log.Flags())
-	warnLogger := log.New(os.Stdout, "WARN", log.Flags())
-	errorLogger := log.New(os.Stdout, "ERROR", log.Flags())
 	logger := &AgreeGateLoager{}
-	logger.InfoLogger = infoLogger
-	logger.WarnLogger = warnLogger
-	logger.ErrorLogger = errorLogger
+	logger.InfoLogger = InfoLog
+	logger.WarnLogger = WarningLog
+	logger.ErrorLogger = ErrorLog
 	return logger
 }
 
